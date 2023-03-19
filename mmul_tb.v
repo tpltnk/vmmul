@@ -30,8 +30,6 @@ initial begin
     #5;
     enable = 0;
     #5;
-    $dumpfile("mmul_tb.vcd");
-    $dumpvars(0, mmul_tb);
     $stop;
 end
 

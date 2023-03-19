@@ -21,7 +21,7 @@ module mmul
     output reg invalid
 );
 
-reg signed [WIDTH-1:0] mat_a_tmp [M-1:0][N-1:0];
+reg signed [WIDTH-1:0] mat_a_tmp [doneM-1:0][N-1:0];
 reg signed [WIDTH-1:0] mat_b_tmp [K-1:0][L-1:0];
 reg signed [WIDTH-1:0] mat_axb_tmp [M-1:0][L-1:0];
 reg signed [WIDTH*2-1:0] prod_tmp;
@@ -35,6 +35,9 @@ integer l = 0;
 integer m = 0;
 
 initial begin
+    $dumpfile("mmul.vcd");
+    $dumpvars(0, mmul);
+
     if (N != K) begin
         $display("Dimension mismatch: N=%d, K=%d", N, K);
         invalid = 1;
@@ -73,6 +76,8 @@ initial begin
 
     l = 0;
     m = 0;
+
+    $display("mat_a_tmp=%b\nmat_b_tmp=%b", mat_a_tmp, mat_b_tmp);
 end
 
 always @(posedge clk or posedge reset)
@@ -112,6 +117,7 @@ begin
         $display("RESET: %d", reset);
     end
     else if (enable && !done) begin
+        $display("mat_a_tmp[%d][%d]=%d, mat_b_tmp[%d][%d]=%d", i, k, mat_a_tmp[i][k], k, j, mat_b_tmp[k][j]);
         prod_tmp = mat_a_tmp[i][k] * mat_b_tmp[k][j];
         mat_axb_tmp[i][j] = mat_axb_tmp[i][j] + prod_tmp[WIDTH-1:0];
         if (k == K-1) begin

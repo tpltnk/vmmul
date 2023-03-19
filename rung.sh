@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-gtkwave mmul_tb.vcd
+VCD=${1:-"mmul"}
+
+gtkwave $VCD.vcd
