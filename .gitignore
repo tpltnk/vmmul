@@ -1,3 +1,4 @@
 *.out
+*.vcd
 mmul
 mmul_tb
