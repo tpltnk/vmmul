@@ -22,8 +22,8 @@ initial begin
     #100;
     wait (done);
     #5;
-    for (i = 0; i <= 2; i++) begin
-        for (j = 0; j <= 2; j++) begin
+    for (i = 0; i < 3; i++) begin
+        for (j = 0; j < 3; j++) begin
             mat_a_plus_b_tmp[i][j] = mat_a_plus_b[(i*3+j)*8+:8];
         end
     end
