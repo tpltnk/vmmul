@@ -50,7 +50,7 @@ mmul2_arbiter #(
     .i(i),
     .j(j),
     .k(k),
-    .done(completed)
+    .completed(completed)
 );
 
 
@@ -86,7 +86,7 @@ always @(posedge clk or posedge enable) begin
                 end else i++;
             end else j++;
         end else k++;
-        C[i*CB*W + j*W +: W] = C[i*CB*W+j*W+:W] + A[i*CA*W+k*W+:W] * B[k*CB*W+j*W+:W];
+        C[W*(i*CB+j)+:W] = C[W*(i*CB+j)+:W] + A[W*(i*CA+k)+:W] * B[W*(k*CB+j)+:W];
         $monitor("i=%d, j=%d, k=%d", i, j, k);
     end
 end

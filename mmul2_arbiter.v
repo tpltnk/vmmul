@@ -12,11 +12,11 @@ module mmul2_arbiter #(
     input [31:0] i,
     input [31:0] j,
     input [31:0] k,
-    output reg done
+    output reg completed
 );
 
 always @(posedge clk) begin
-    done = k == RB-1 && j == CB-1 && i == RA-1;
+    completed = k == RB-1 && j == CB-1 && i == RA-1;
 end
 
 endmodule
