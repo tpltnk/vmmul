@@ -1,4 +1,4 @@
-module mmul2_validator #(
+module mmul_validator #(
     // Rows of Matrix A
     parameter unsigned RA = 0,
     // Columns of Matrix A

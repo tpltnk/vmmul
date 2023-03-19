@@ -1,4 +1,4 @@
-module mmul2_arbiter #(
+module mmul_arbiter #(
     // Rows of Matrix A
     parameter unsigned RA = 0,
     // Columns of Matrix A

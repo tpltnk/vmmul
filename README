@@ -1,7 +1,3 @@
 Matmul using verilog.
 
-Features:
-
-1. Custom width of element
-
 Warning: Not for use in production.
