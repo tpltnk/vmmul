@@ -23,13 +23,13 @@ initial begin
     #5;
     for (i = 0; i <= 2; i++) begin
         for (j = 0; j <= 2; j++) begin
+            $display("mat_a_plus_b[%d][%d] = %b", i, j, mat_a_plus_b[(i*3+j)*8+:8]);
             mat_a_plus_b_tmp[i][j] = mat_a_plus_b[(i*3+j)*8+:8];
         end
     end
     #5;
     enable = 0;
     #5;
-    $display("mat_a_plus_b = %b", mat_a_plus_b);
     $dumpfile("mmul_tb.vcd");
     $dumpvars(0, mmul_tb);
     $stop;
@@ -37,7 +37,7 @@ end
 
 // period = 5ns
 // freq = 200MHz
-always #5 clk = ~clk;
+always #5 clk <= ~clk;
 
 mmul mmul_inst(
     .clk(clk),

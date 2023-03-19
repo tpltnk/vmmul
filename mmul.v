@@ -14,19 +14,27 @@ module mmul(
 reg signed [7:0] mat_a_tmp [2:0][2:0];
 reg signed [7:0] mat_b_tmp [2:0][2:0];
 reg signed [7:0] mat_a_plus_b_tmp [2:0][2:0];
+reg signed [15:0] temp_prod;
 
-integer i;
-integer j;
-integer k;
+integer i = 0;
+integer j = 0;
+integer k = 0;
+
+// initializer integers
+integer l = 0;
+integer m = 0;
 
 initial begin
-    for (i = 0; i <= 2; i++) begin
-        for (j = 0; j <= 2; j++) begin
-            mat_a_tmp[i][j] = mat_a[(i*3+j)*8+:8];
-            mat_b_tmp[i][j] = mat_b[(i*3+j)*8+:8];
-            mat_a_plus_b_tmp[i][j] = 0;
+    for (l = 0; l <= 2; l++) begin
+        for (m = 0; m <= 2; m++) begin
+            mat_a_tmp[l][m] = mat_a[(l*3+m)*8+:8];
+            mat_b_tmp[l][m] = mat_b[(l*3+m)*8+:8];
+            mat_a_plus_b_tmp[l][m] = 8'd0;
         end
     end
+    // $display("mat_a_tmp=%b, \nmat_b_tmp=%b", mat_a_tmp[0][0], mat_b_tmp[0][0]);
+    l = 0;
+    m = 0;
 end
 
 always @(posedge clk or posedge reset)
@@ -36,16 +44,22 @@ begin
         j = 0;
         k = 0;
         done = 0;
-        for (i = 0; i <= 2; i++) begin
-            for (j = 0; j <= 2; j++) begin
-                mat_a_tmp[i][j] = 0;
-                mat_b_tmp[i][j] = 0;
-                mat_a_plus_b_tmp[i][j] = 0;
+        temp_prod = 0;
+        for (l = 0; l <= 2; l++) begin
+            for (m = 0; m <= 2; m++) begin
+                mat_a_tmp[l][m] = mat_a[(l*3+m)*8+:8];
+                mat_b_tmp[l][m] = mat_b[(l*3+m)*8+:8];
+                mat_a_plus_b_tmp[l][m] = 8'd0;
             end
         end
+        l = 0;
+        m = 0;
+        $display("RESET: %d", reset);
     end
     else if (enable && !done) begin
-        mat_a_plus_b_tmp[i][j] = mat_a_plus_b_tmp[i][j] + mat_a_tmp[i][k] * mat_b_tmp[k][j];
+        $display("mat_a_tmp=%b, \nmat_b_tmp=%b", mat_a_tmp[i][k], mat_b_tmp[k][j]);
+        temp_prod = mat_a_tmp[i][k] * mat_b_tmp[k][j];
+        mat_a_plus_b_tmp[i][j] = mat_a_plus_b_tmp[i][j] + temp_prod[7:0];
         if (k == 2) begin
             k = 0;
             if (j == 2) begin 
@@ -53,21 +67,16 @@ begin
                 if (i == 2) begin
                     i = 0;
                     done = 1;
-                end else begin
-                    i++;
-                end
-            end
-            else begin
-                j++;
-            end
-        end else begin
-            k++;
-        end
+                end else i++;
+            end else j++;
+        end else k++;
+        $display("mat_a=%b\nmat_b=%b", mat_a, mat_b);
+        $display("i=%d, j=%d, k=%d, temp_prod=%d, mat_a_plus_b_tmp=%d", i, j, k, temp_prod, mat_a_plus_b_tmp[i][j]);
     end
-    else if (done == 1) begin
-        for (i = 0; i <= 2; i++) begin
-            for (j = 0; j <= 2; j++) begin
-                mat_a_plus_b[(i*3+j)*8+:8] = mat_a_plus_b_tmp[i][j];
+    else if (done) begin
+        for (l = 0; l <= 2; l++) begin
+            for (m = 0; m <= 2; m++) begin
+                mat_a_plus_b[(l*3+m)*8+:8] = mat_a_plus_b_tmp[l][m];
             end
         end
     end
