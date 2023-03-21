@@ -69,13 +69,19 @@ initial begin
     end
     l = 0;
     m = 0;
-    $display("Initialized C matrix to %B", C);
+    $display("Initialized C matrix to 0 (%dx%d)", RA, CB);
 
-    wait (valid);
+    if (valid) begin
+        $display("Matrix dimensions are valid");
+    end else begin
+        $display("Matrix dimensions are invalid");
+    end
+
+    // wait (valid);
     $display("Matrix dimensions are valid");
 end
 
-always @(posedge clk or posedge enable) begin
+always @(posedge clk) begin
     if (enable && valid && !completed) begin
         if (k == n-1) begin
             k = 0;
