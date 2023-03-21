@@ -8,4 +8,5 @@ memory
 opt
 techmap
 opt
+show -pause mmul
 write_blif mmul.blif
