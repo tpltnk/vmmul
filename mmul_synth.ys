@@ -1,0 +1,12 @@
+read_verilog -sv mmul.v
+# read_verilog -lib +/ice40/cells_sim.v
+hierarchy
+proc
+show -pause mmul
+opt 
+memory
+opt
+techmap
+opt
+show -pause mmul
+write_blif mmul.blif
